@@ -254,15 +254,15 @@ export interface GetTemplateInput {
 
 export function getTemplate(input: GetTemplateInput): FileOutput[] {
   const templateName = input.template_name.toLowerCase() as TemplateName;
-  const config = templateConfigs[templateName];
 
-  if (!config) {
+  if (!Object.hasOwn(templateConfigs, templateName)) {
     const validNames = Object.keys(templateConfigs).join(", ");
     throw new Error(
       `Unknown template: "${input.template_name}". Valid templates: ${validNames}`
     );
   }
 
+  const config = templateConfigs[templateName];
   const { contractName, functions } = config;
 
   return [

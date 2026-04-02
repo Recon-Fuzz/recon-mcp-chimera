@@ -33,15 +33,15 @@ export interface PatternExplanation {
 
 export function explainPattern(input: ExplainPatternInput): PatternExplanation {
   const patternName = input.pattern_name.toLowerCase() as PatternName;
-  const pattern = patterns[patternName];
 
-  if (!pattern) {
+  if (!Object.hasOwn(patterns, patternName)) {
     const validNames = Object.keys(patterns).join(", ");
     throw new Error(
       `Unknown pattern: "${input.pattern_name}". Valid patterns: ${validNames}`
     );
   }
 
+  const pattern = patterns[patternName];
   return {
     name: pattern.name,
     title: pattern.title,

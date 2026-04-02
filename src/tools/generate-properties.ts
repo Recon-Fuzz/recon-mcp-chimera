@@ -71,15 +71,15 @@ export function generateProperties(
   input: GeneratePropertiesInput
 ): PropertyOutput[] {
   const protocolType = input.protocol_type.toLowerCase() as ProtocolType;
-  const catalog = propertyCatalogs[protocolType];
 
-  if (!catalog) {
+  if (!Object.hasOwn(propertyCatalogs, protocolType)) {
     const validTypes = Object.keys(propertyCatalogs).join(", ");
     throw new Error(
       `Unknown protocol type: "${input.protocol_type}". Valid types: ${validTypes}`
     );
   }
 
+  const catalog = propertyCatalogs[protocolType];
   const selected = detectRelevantProperties(input.contract_source, catalog);
 
   return selected.map((prop) => ({

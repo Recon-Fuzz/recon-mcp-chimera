@@ -20,9 +20,11 @@ server.tool(
   {
     contract_name: z
       .string()
+      .max(256)
       .describe("Name of the contract to scaffold tests for"),
     functions: z
-      .array(z.string())
+      .array(z.string().max(512))
+      .max(200)
       .describe(
         'Array of function signatures, e.g. ["deposit(uint256)", "withdraw(uint256)"]'
       ),
@@ -55,6 +57,7 @@ server.tool(
   {
     contract_source: z
       .string()
+      .max(500000)
       .describe("Solidity source code of the contract"),
     protocol_type: z
       .string()
@@ -93,6 +96,7 @@ server.tool(
   {
     template_name: z
       .string()
+      .max(100)
       .describe(
         "Template name: erc20, vault, lending, amm, governance, or staking"
       ),
@@ -125,6 +129,7 @@ server.tool(
   {
     pattern_name: z
       .string()
+      .max(100)
       .describe(
         "Pattern name: actors, ghosts, cross-contract, or setup-layering"
       ),

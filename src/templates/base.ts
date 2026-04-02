@@ -1,5 +1,20 @@
 // Template generators for Chimera fuzzing suites
 
+function sanitizeInput(input: string): string {
+  // Strip Unicode control characters (categories Cc, Cf except common whitespace)
+  return input.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F\u200B-\u200F\u2028-\u202F\u2060-\u206F\uFEFF]/g, '');
+}
+
+function validateContractName(name: string): string {
+  if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name)) {
+    throw new Error(`Invalid contract name: "${name.slice(0, 100)}". Must be a valid Solidity identifier.`);
+  }
+  if (name.length > 256) {
+    throw new Error(`Contract name too long (max 256 characters)`);
+  }
+  return name;
+}
+
 export interface ParsedFunction {
   name: string;
   params: { type: string; name: string }[];
@@ -7,27 +22,31 @@ export interface ParsedFunction {
 }
 
 export function parseSignature(sig: string): ParsedFunction {
-  const match = sig.match(/^(\w+)\(([^)]*)\)$/);
+  sig = sanitizeInput(sig);
+  const match = sig.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\(([^)]*)\)$/);
   if (!match) {
-    return { name: sig, params: [], raw: sig };
+    throw new Error(`Invalid function signature: "${sig.slice(0, 100)}". Expected format: functionName(type1,type2)`);
   }
   const name = match[1];
   const paramStr = match[2].trim();
-  const params =
-    paramStr.length === 0
-      ? []
-      : paramStr.split(",").map((p, i) => {
-          const trimmed = p.trim();
-          const parts = trimmed.split(/\s+/);
-          return {
-            type: parts[0],
-            name: parts.length > 1 ? parts[1] : `arg${i}`,
-          };
-        });
+  const params = paramStr.length === 0 ? [] : paramStr.split(",").map((p, i) => {
+    const trimmed = p.trim();
+    const parts = trimmed.split(/\s+/);
+    const type = parts[0];
+    const paramName = parts.length > 1 ? parts[1] : `arg${i}`;
+    if (!/^[a-zA-Z_][a-zA-Z0-9_\[\]]*$/.test(type)) {
+      throw new Error(`Invalid parameter type: "${type.slice(0, 50)}"`);
+    }
+    if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(paramName)) {
+      throw new Error(`Invalid parameter name: "${paramName.slice(0, 50)}"`);
+    }
+    return { type, name: paramName };
+  });
   return { name, params, raw: sig };
 }
 
 export function generateSetup(contractName: string): string {
+  contractName = validateContractName(sanitizeInput(contractName));
   return `// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
@@ -45,6 +64,7 @@ abstract contract Setup is BaseSetup {
 }
 
 export function generateBeforeAfter(contractName: string): string {
+  contractName = validateContractName(sanitizeInput(contractName));
   return `// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
@@ -89,6 +109,7 @@ export function generateTargetFunctions(
   contractName: string,
   functions: ParsedFunction[]
 ): string {
+  contractName = validateContractName(sanitizeInput(contractName));
   const handlers = functions
     .map((fn) => {
       const paramDecls = fn.params
@@ -117,6 +138,7 @@ ${handlers}
 }
 
 export function generateProperties(_contractName: string): string {
+  validateContractName(sanitizeInput(_contractName));
   return `// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
@@ -137,6 +159,7 @@ abstract contract Properties is BeforeAfter {
 }
 
 export function generateCryticTester(contractName: string): string {
+  contractName = validateContractName(sanitizeInput(contractName));
   return `// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
