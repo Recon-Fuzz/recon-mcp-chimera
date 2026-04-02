@@ -1,0 +1,1 @@
+{"version":3,"file":"get-template.d.ts","sourceRoot":"","sources":["../../src/tools/get-template.ts"],"names":[],"mappings":"AAaA,OAAO,KAAK,EAAE,UAAU,EAAE,MAAM,uBAAuB,CAAC;AAExD,MAAM,MAAM,YAAY,GACpB,OAAO,GACP,OAAO,GACP,SAAS,GACT,KAAK,GACL,YAAY,GACZ,SAAS,CAAC;AAqOd,MAAM,WAAW,gBAAgB;IAC/B,aAAa,EAAE,MAAM,CAAC;CACvB;AAED,wBAAgB,WAAW,CAAC,KAAK,EAAE,gBAAgB,GAAG,UAAU,EAAE,CA+CjE"}

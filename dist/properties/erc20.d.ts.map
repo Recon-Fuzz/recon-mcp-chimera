@@ -1,0 +1,1 @@
+{"version":3,"file":"erc20.d.ts","sourceRoot":"","sources":["../../src/properties/erc20.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,WAAW;IAC1B,IAAI,EAAE,MAAM,CAAC;IACb,WAAW,EAAE,MAAM,CAAC;IACpB,QAAQ,EAAE,UAAU,GAAG,MAAM,GAAG,QAAQ,GAAG,KAAK,CAAC;IACjD,QAAQ,EAAE,MAAM,CAAC;CAClB;AAED,eAAO,MAAM,eAAe,EAAE,WAAW,EAgFxC,CAAC"}
