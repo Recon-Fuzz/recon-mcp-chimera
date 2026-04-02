@@ -292,11 +292,11 @@ export function getTemplate(input: GetTemplateInput): FileOutput[] {
     },
     {
       path: `echidna.yaml`,
-      content: generateEchidnaYaml(contractName),
+      content: generateEchidnaYaml(),
     },
     {
       path: `medusa.json`,
-      content: generateMedusaJson(contractName),
+      content: generateMedusaJson(),
     },
   ];
 }

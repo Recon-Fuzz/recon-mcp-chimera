@@ -19,7 +19,7 @@ fail_on_revert = false
 `;
 }
 
-export function generateEchidnaYaml(contractName: string): string {
+export function generateEchidnaYaml(): string {
   return `testMode: assertion
 testLimit: 100000
 seqLen: 100
@@ -37,7 +37,7 @@ testContract: "CryticTester"
 `;
 }
 
-export function generateMedusaJson(contractName: string): string {
+export function generateMedusaJson(): string {
   const config = {
     fuzzing: {
       workers: 4,

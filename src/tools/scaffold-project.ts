@@ -53,11 +53,11 @@ export function scaffoldProject(input: ScaffoldInput): FileOutput[] {
     },
     {
       path: `echidna.yaml`,
-      content: generateEchidnaYaml(contract_name),
+      content: generateEchidnaYaml(),
     },
     {
       path: `medusa.json`,
-      content: generateMedusaJson(contract_name),
+      content: generateMedusaJson(),
     },
   ];
 

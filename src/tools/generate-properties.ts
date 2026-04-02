@@ -39,32 +39,47 @@ function detectRelevantProperties(
   source: string,
   properties: PropertyDef[]
 ): PropertyDef[] {
-  // Return 8-15 curated properties based on protocol type
-  // Prioritize by severity, then try to match function names in source
-  const critical = properties.filter((p) => p.severity === "critical");
-  const high = properties.filter((p) => p.severity === "high");
-  const medium = properties.filter((p) => p.severity === "medium");
-  const low = properties.filter((p) => p.severity === "low");
+  const sourceLower = source.toLowerCase();
 
-  const selected: PropertyDef[] = [];
+  // Score each property: severity base + source keyword match bonus
+  const scored = properties.map((prop) => {
+    let score = 0;
+    // Base score by severity
+    switch (prop.severity) {
+      case "critical": score = 40; break;
+      case "high": score = 30; break;
+      case "medium": score = 20; break;
+      case "low": score = 10; break;
+    }
+    // Bonus if the property name or keywords appear in the contract source
+    if (source.length > 0) {
+      const keywords = prop.name
+        .replace(/invariant_/g, "")
+        .split("_")
+        .filter((w) => w.length > 3);
+      for (const kw of keywords) {
+        if (sourceLower.includes(kw)) {
+          score += 5;
+        }
+      }
+    }
+    return { prop, score };
+  });
 
-  // Always include all critical properties
-  selected.push(...critical);
+  // Sort by score descending, return 8-15
+  scored.sort((a, b) => b.score - a.score);
+  const minCount = Math.min(8, scored.length);
+  const maxCount = Math.min(15, scored.length);
 
-  // Add high severity up to a reasonable count
-  for (const prop of high) {
-    if (selected.length >= 12) break;
-    selected.push(prop);
+  // Include at least 8, up to 15 if they scored above the low threshold
+  const selected = scored.slice(0, minCount).map((s) => s.prop);
+  for (let i = minCount; i < maxCount; i++) {
+    if (scored[i].score >= 10) {
+      selected.push(scored[i].prop);
+    }
   }
 
-  // Add medium/low to reach at least 8
-  for (const prop of [...medium, ...low]) {
-    if (selected.length >= 10) break;
-    selected.push(prop);
-  }
-
-  // Cap at 15
-  return selected.slice(0, 15);
+  return selected;
 }
 
 export function generateProperties(

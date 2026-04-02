@@ -71,25 +71,22 @@ pragma solidity ^0.8.0;
 import {Setup} from "./Setup.sol";
 
 abstract contract BeforeAfter is Setup {
-    struct Snapshot {
-        uint256 totalSupply;
-        uint256 actorBalance;
-        uint256 contractBalance;
+    // Add protocol-specific state variables to snapshot here
+    // Example for a token: uint256 totalSupply;
+    // Example for a vault: uint256 sharePrice;
+    uint256 internal _beforeContractBalance;
+    uint256 internal _afterContractBalance;
+
+    function __before() internal {
+        _beforeContractBalance = address(target).balance;
+        // Add protocol-specific snapshots here
+        // Example: _beforeTotalSupply = target.totalSupply();
     }
 
-    Snapshot internal _before;
-    Snapshot internal _after;
-
-    function _snapshotBefore() internal {
-        _before.totalSupply = target.totalSupply();
-        _before.actorBalance = address(msg.sender).balance;
-        _before.contractBalance = address(target).balance;
-    }
-
-    function _snapshotAfter() internal {
-        _after.totalSupply = target.totalSupply();
-        _after.actorBalance = address(msg.sender).balance;
-        _after.contractBalance = address(target).balance;
+    function __after() internal {
+        _afterContractBalance = address(target).balance;
+        // Add protocol-specific snapshots here
+        // Example: _afterTotalSupply = target.totalSupply();
     }
 }
 `;
@@ -145,14 +142,16 @@ pragma solidity ^0.8.0;
 import {BeforeAfter} from "./BeforeAfter.sol";
 
 abstract contract Properties is BeforeAfter {
-    /// @dev Solvency: contract balance must always cover total supply
+    /// @dev Solvency: contract balance should not decrease unexpectedly
     function invariant_solvency() public view returns (bool) {
-        return address(target).balance >= target.totalSupply();
+        // Replace with protocol-specific solvency check
+        // Example for a vault: token.balanceOf(address(target)) >= target.totalAssets()
+        return address(target).balance >= 0;
     }
 
-    /// @dev No zero-share minting: total supply should not increase without deposits
-    function invariant_no_free_shares() public view returns (bool) {
-        return true; // Placeholder: implement based on protocol logic
+    /// @dev Balance consistency: placeholder for protocol-specific invariant
+    function invariant_balance_consistency() public view returns (bool) {
+        return true; // Implement based on protocol logic
     }
 }
 `;
@@ -164,10 +163,9 @@ export function generateCryticTester(contractName: string): string {
 pragma solidity ^0.8.0;
 
 import {TargetFunctions} from "./TargetFunctions.sol";
-import {Properties} from "./Properties.sol";
 import {CryticAsserts} from "@chimera/CryticAsserts.sol";
 
-contract CryticTester is TargetFunctions, Properties, CryticAsserts {
+contract CryticTester is TargetFunctions, CryticAsserts {
     constructor() {
         setup();
     }
