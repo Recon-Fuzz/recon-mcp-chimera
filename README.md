@@ -2,6 +2,8 @@
 
 MCP server that scaffolds [Chimera](https://getrecon.xyz/learn/chimera-framework) fuzzing test suites for Solidity smart contracts. Generates ready-to-compile projects with properties, handlers, and fuzzer configs.
 
+> **Ready to publish?** See [MCP_ACTIVATION.md](MCP_ACTIVATION.md) for the full guide — npm publish, directory listings, llms.txt integration, and Claude Desktop/Cursor setup.
+
 ## Tools
 
 | Tool | Input | Returns |
