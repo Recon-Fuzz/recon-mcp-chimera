@@ -1,1 +1,0 @@
-{"version":3,"file":"cross-contract.js","sourceRoot":"","sources":["../../src/patterns/cross-contract.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,MAAM,oBAAoB,GAAG;IAClC,IAAI,EAAE,gBAAgB;IACtB,KAAK,EAAE,oCAAoC;IAC3C,WAAW,EAAE;+DACgD;IAC7D,WAAW,EAAE;;;;;;;;;;;;;;;;;;;;;CAqBd;IACC,WAAW,EAAE;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;EAsEb;CACD,CAAC"}
