@@ -60,10 +60,8 @@ server.tool(
       .max(500000)
       .describe("Solidity source code of the contract"),
     protocol_type: z
-      .string()
-      .describe(
-        "Protocol type: erc20, vault, lending, amm, governance, or staking"
-      ),
+      .enum(["erc20", "vault", "lending", "amm", "governance", "staking"])
+      .describe("Protocol type"),
   },
   async ({ contract_source, protocol_type }) => {
     try {
@@ -95,11 +93,8 @@ server.tool(
   "Get a complete ready-to-compile Chimera project template for a standard protocol type.",
   {
     template_name: z
-      .string()
-      .max(100)
-      .describe(
-        "Template name: erc20, vault, lending, amm, governance, or staking"
-      ),
+      .enum(["erc20", "vault", "lending", "amm", "governance", "staking"])
+      .describe("Template name"),
   },
   async ({ template_name }) => {
     try {
@@ -128,11 +123,8 @@ server.tool(
   "Get a detailed explanation of a Chimera fuzzing pattern with code examples.",
   {
     pattern_name: z
-      .string()
-      .max(100)
-      .describe(
-        "Pattern name: actors, ghosts, cross-contract, or setup-layering"
-      ),
+      .enum(["actors", "ghosts", "cross-contract", "setup-layering"])
+      .describe("Pattern name"),
   },
   async ({ pattern_name }) => {
     try {
