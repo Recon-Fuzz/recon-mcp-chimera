@@ -1,0 +1,40 @@
+# @recon-fuzz/mcp-chimera
+
+> MCP server that scaffolds Chimera fuzzing test suites for Solidity smart contracts.
+
+## Tools (4)
+
+- scaffold_project: Generate a full Chimera project from contract name + function signatures — returns Setup, Properties, TargetFunctions, BeforeAfter, CryticTester, and fuzzer configs
+- generate_properties: Generate 8-15 curated invariant properties with Solidity skeletons for a given protocol type
+- get_template: Get a complete ready-to-compile Chimera project for a standard protocol type
+- explain_pattern: Get a detailed explanation of a Chimera testing pattern with code examples
+
+## Protocol types (6)
+
+erc20, vault, lending, amm, governance, staking
+
+## Patterns (4)
+
+- actors: Multi-actor testing with address management and actor switching
+- ghosts: Ghost variable tracking for state assertions across transactions
+- cross-contract: Testing interactions between multiple deployed contracts
+- setup-layering: Composable setup inheritance for complex deployment scenarios
+
+## Setup
+
+```json
+{
+  "mcpServers": {
+    "chimera-scaffold": {
+      "command": "npx",
+      "args": ["@recon-fuzz/mcp-chimera"]
+    }
+  }
+}
+```
+
+No API key needed. The server runs entirely locally with no network calls.
+
+## Privacy
+
+This server runs entirely offline. No network calls, no environment variables read, no data written to disk, no telemetry. All template generation happens in-process.
