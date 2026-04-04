@@ -6,6 +6,7 @@ src = "src"
 out = "out"
 libs = ["lib"]
 solc_version = "0.8.24"
+remappings = ["@chimera/=lib/chimera/src/"]
 
 [fuzz]
 runs = 10000

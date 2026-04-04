@@ -7,12 +7,24 @@
     "recon-mcp-chimera": "dist/index.js"
   },
   "files": ["dist"],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Recon-Fuzz/recon-mcp-chimera.git"
+  },
+  "homepage": "https://getrecon.xyz/learn/chimera-framework",
+  "keywords": ["mcp", "recon", "chimera", "fuzzing", "solidity", "invariant-testing", "scaffolding", "echidna", "medusa"],
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js"
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.29.0"
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.23.0"
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
