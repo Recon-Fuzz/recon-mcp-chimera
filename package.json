@@ -13,7 +13,9 @@
     "url": "https://github.com/Recon-Fuzz/recon-mcp-chimera.git"
   },
   "homepage": "https://getrecon.xyz/learn/chimera-framework",
-  "keywords": ["mcp", "recon", "chimera", "fuzzing", "solidity", "invariant-testing", "scaffolding", "echidna", "medusa"],
+  "author": "Recon Fuzz",
+  "bugs": "https://github.com/Recon-Fuzz/recon-mcp-chimera/issues",
+  "keywords": ["mcp", "mcp-server", "model-context-protocol", "recon", "chimera", "fuzzing", "solidity", "invariant-testing", "scaffolding", "echidna", "medusa", "ai", "claude"],
   "engines": {
     "node": ">=18"
   },
