@@ -1,12 +1,10 @@
-# @recon-fuzz/mcp-chimera
+# @recon-fuzz-mcp/chimera
 
-[![npm](https://img.shields.io/npm/v/@recon-fuzz/mcp-chimera.svg)](https://www.npmjs.com/package/@recon-fuzz/mcp-chimera)
+[![npm](https://img.shields.io/npm/v/@recon-fuzz-mcp/chimera.svg)](https://www.npmjs.com/package/@recon-fuzz-mcp/chimera)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Node 18+](https://img.shields.io/badge/node-%3E%3D18-brightgreen.svg)](https://nodejs.org/)
 
 MCP server that scaffolds [Chimera](https://getrecon.xyz/learn/chimera-framework) fuzzing test suites for Solidity smart contracts. Generates ready-to-compile projects with properties, handlers, and fuzzer configs.
-
-> **Ready to publish?** See [MCP_ACTIVATION.md](MCP_ACTIVATION.md) for the full guide — npm publish, directory listings, llms.txt integration, and Claude Desktop/Cursor setup.
 
 ## Tools
 
@@ -25,14 +23,39 @@ MCP server that scaffolds [Chimera](https://getrecon.xyz/learn/chimera-framework
 
 `actors`, `ghosts`, `cross-contract`, `setup-layering`
 
-## Setup for Claude Desktop / Cursor
+## Installation
+
+### Claude Code
+
+```bash
+claude mcp add chimera-scaffold -- npx @recon-fuzz-mcp/chimera
+```
+
+### Claude Desktop
+
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
     "chimera-scaffold": {
       "command": "npx",
-      "args": ["@recon-fuzz/mcp-chimera"]
+      "args": ["@recon-fuzz-mcp/chimera"]
+    }
+  }
+}
+```
+
+### Cursor
+
+Add to `.cursor/mcp.json` in your project:
+
+```json
+{
+  "mcpServers": {
+    "chimera-scaffold": {
+      "command": "npx",
+      "args": ["@recon-fuzz-mcp/chimera"]
     }
   }
 }
@@ -61,49 +84,6 @@ echo '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"scaffold_project"
 # Get a lending template
 echo '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_template","arguments":{"template_name":"lending"}},"id":3}' | node dist/index.js
 ```
-
-## Validation steps
-
-Before making this repo public or publishing to npm, verify the following:
-
-### 1. Functional checks
-
-- [ ] `npm run build` compiles with zero errors
-- [ ] `tools/list` returns 4 tools
-- [ ] `scaffold_project` with `SimpleVault` + `["deposit(uint256)", "withdraw(uint256)"]` returns 8 files
-- [ ] Generated Setup.sol, Properties.sol, TargetFunctions.sol, BeforeAfter.sol, CryticTester.sol are valid Solidity (paste into Remix or run `forge build` in a test project)
-- [ ] `generate_properties` returns properties for each of the 6 protocol types
-- [ ] `get_template` returns complete projects for all 6 protocol types
-- [ ] `explain_pattern` returns explanations for all 4 patterns
-- [ ] Generated echidna.yaml and medusa.json are valid configs
-
-### 2. Security checks
-
-- [ ] `@modelcontextprotocol/sdk` is pinned to `^1.29.0` (not `"latest"`)
-- [ ] `contract_name` is validated as a strict Solidity identifier (`/^[a-zA-Z_][a-zA-Z0-9_]*$/`) — try injecting `"Evil {} contract Hack {"`
-- [ ] Function signatures are validated — try injecting `"deposit(uint256); selfdestruct(msg.sender); //"`
-- [ ] Parameter types are validated against Solidity identifier pattern
-- [ ] Unicode control characters are stripped from all inputs (Trojan Source prevention)
-- [ ] Prototype pollution is blocked — try `protocol_type: "__proto__"` and `pattern_name: "constructor"`
-- [ ] Input length limits enforced: contract_name max 256, functions max 200 items, signatures max 512 chars
-- [ ] No network calls, no env vars read, no filesystem writes, no telemetry
-
-### 3. Code quality of generated Solidity
-
-- [ ] Inheritance chain is correct: Setup -> BeforeAfter -> Properties -> TargetFunctions -> CryticTester
-- [ ] CryticTester inherits TargetFunctions + CryticAsserts (not Properties separately — that's already in the chain)
-- [ ] Handler functions use `bound()` for input clamping (not `clampBetween`)
-- [ ] Properties use `invariant_` prefix
-- [ ] BeforeAfter hooks use `__before()` and `__after()`
-- [ ] Generated foundry.toml remappings include `@chimera/=lib/chimera/src/`
-- [ ] All generated .sol files have SPDX license identifier and pragma
-
-### 4. Pre-publish checks
-
-- [ ] Add `"files": ["dist"]` to package.json
-- [ ] Set `"sourceMap": false` in tsconfig.json for production
-- [ ] Run `npm audit` — should report 0 vulnerabilities
-- [ ] Test with Claude Desktop or Cursor — ask it to "scaffold a Chimera test suite for an ERC20 token" and verify the output compiles
 
 ## Architecture
 

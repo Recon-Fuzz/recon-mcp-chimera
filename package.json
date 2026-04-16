@@ -1,5 +1,5 @@
 {
-  "name": "@recon-fuzz/mcp-chimera",
+  "name": "@recon-fuzz-mcp/chimera",
   "version": "1.0.0",
   "description": "MCP server that scaffolds Chimera fuzzing test suites",
   "type": "module",
